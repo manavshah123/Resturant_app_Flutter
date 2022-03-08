@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -35,6 +33,8 @@ class _HomeState extends State<Home> {
       'name': 'Cheezy-7 Pizza',
       'price': '560',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -45,6 +45,7 @@ class _HomeState extends State<Home> {
       'name': 'Vegan Tofu Tikka Masala',
       'price': '800',
       'favorite': false,
+      'des': 'Vegan Tofu Tikka Masala is delicious',
       'onClick': () {
         print('clicked');
       },
@@ -55,6 +56,8 @@ class _HomeState extends State<Home> {
       'name': 'Gulab Jaamun',
       'price': '300',
       'favorite': false,
+      'des':
+          'Gulab jamun (or gulaab jamun) is among Indias most popular desserts and is often referred to as Indian doughnuts. ',
       'onClick': () {
         print('clicked');
       },
@@ -65,6 +68,8 @@ class _HomeState extends State<Home> {
       'name': 'Chole bhature',
       'price': '180',
       'favorite': false,
+      'des':
+          'is a food dish popular in the Northern areas of the Indian subcontinent. It is a combination of chana masala (spicy white chickpeas) and bhatura/puri, a fried bread made from maida.',
       'onClick': () {
         print('clicked');
       },
@@ -75,6 +80,8 @@ class _HomeState extends State<Home> {
       'name': 'Kati roll',
       'price': '70',
       'favorite': false,
+      'des':
+          'is a street-food dish originating from Kolkata, West Bengal. In its original form, it is a skewer-roasted kebab wrapped in a paratha bread, although over the years many variants have evolved all of which now go under the generic name of kati roll.',
       'onClick': () {
         print('clicked');
       },
@@ -85,6 +92,8 @@ class _HomeState extends State<Home> {
       'name': 'Jalebi',
       'price': '150',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -95,6 +104,8 @@ class _HomeState extends State<Home> {
       'name': 'Cheezy-7 Pizza',
       'price': '560',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -105,6 +116,8 @@ class _HomeState extends State<Home> {
       'name': 'Vegan Tofu Tikka Masala',
       'price': '800',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -115,6 +128,8 @@ class _HomeState extends State<Home> {
       'name': 'Gulab Jaamun',
       'price': '300',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -125,6 +140,8 @@ class _HomeState extends State<Home> {
       'name': 'Chole bhature',
       'price': '180',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -135,6 +152,8 @@ class _HomeState extends State<Home> {
       'name': 'Kati roll',
       'price': '70',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -145,6 +164,8 @@ class _HomeState extends State<Home> {
       'name': 'Jalebi',
       'price': '150',
       'favorite': false,
+      'des':
+          'Loaded with mozzarella, cream cheese, cheddar, monterey jack, orange cream cheese, Colby and orange cheddar, this pizza is a paradise for cheese lovers.',
       'onClick': () {
         print('clicked');
       },
@@ -250,16 +271,30 @@ class _HomeState extends State<Home> {
               itemCount: data.length,
               itemBuilder: (context, i) {
                 return item(
-                  data[i]['name'],
-                  data[i]['price'],
-                  data[i]['image'],
-                  data[i]['onClick'],
-                  (){
+                  name: data[i]['name'],
+                  price: data[i]['price'],
+                  image: data[i]['image'],
+                  des: data[i]['des'],
+                  onTap: () {
+                    setState(() {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return BottomSheetData(
+                              img: data[i]['image'],
+                              name: data[i]['name'],
+                              price: data[i]['price'],
+                              des: data[i]['des'],
+                            );
+                          });
+                    });
+                  },
+                  onfav: () {
                     setState(() {
                       data[i]['favorite'] = !data[i]['favorite'];
                     });
                   },
-                  data[i]['favorite'] ?? false,
+                  favorite: data[i]['favorite'] ?? false,
                 );
               },
             ),
@@ -291,14 +326,15 @@ class _HomeState extends State<Home> {
   ],
 );*/
 
-Widget item(
-  String name,
-  String price,
-  String image,
+Widget item({
+  String name = '',
+  String price = '',
+  String image = '',
+  String des = '',
   Function()? onTap,
   Function()? onfav,
-    bool favorite,
-) =>
+  bool favorite = false,
+}) =>
     ListTile(
       onTap: onTap,
       leading: CircleAvatar(
@@ -307,8 +343,120 @@ Widget item(
       ),
       trailing: IconButton(
         onPressed: onfav,
-        icon: Icon(favorite? Icons.favorite : Icons.favorite_border),
+        icon: Icon(favorite ? Icons.favorite : Icons.favorite_border),
       ),
       title: Text(name),
       subtitle: Text(price),
     );
+
+class BottomSheetData extends StatefulWidget {
+  String img = '';
+  String name = "";
+  String price = "";
+  String des = "";
+
+  BottomSheetData(
+      {this.img = '', this.name = '', this.price = '', this.des = '', Key? key})
+      : super(key: key);
+
+  @override
+  State<BottomSheetData> createState() => _BottomSheetDataState();
+}
+
+class _BottomSheetDataState extends State<BottomSheetData> {
+  int number = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(widget.img),
+          ),
+          title: Text(
+            widget.name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(widget.price,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        ),
+        SizedBox(
+          height: 60.0,
+        ),
+        Row(
+          children: [
+            SizedBox(
+              width: 20.0,
+              height: 30.0,
+            ),
+            Icon(Icons.description),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              'Description',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Text(widget.des),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Quantity",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Container(
+                color: Colors.black12,
+                child: Row(
+                  children: [
+                    IconButton(
+                      tooltip: "Add",
+                      onPressed: () {
+                        setState(() {
+                          number--;
+                        });
+                      },
+                      icon: Icon(Icons.remove),
+                    ),
+                    Text('$number',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    IconButton(
+                      tooltip: "Add",
+                      onPressed: () {
+                        setState(() {
+                          number++;
+                        });
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // Respond to button press
+              },
+              icon: Icon(Icons.shopping_cart, size: 18),
+              label: Text("ADD TO CART"),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
